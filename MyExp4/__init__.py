@@ -1,8 +1,6 @@
 from flask import Flask
 app: Flask = Flask(__name__, instance_relative_config=True)  # 实例化,创建应用对象
 
-import MyExp4.views
-
 '''
 配置设置
 '''
@@ -33,6 +31,10 @@ copy coupons_form from '/mnt/hgfs/share/yuwen_CouponsForm.csv' csv header;
 copy customer_form from '/mnt/hgfs/share/zhouqi_CustomerForm.csv' csv header;
 copy sign_up_form from '/mnt/hgfs/share/junnan_SignUpForm.csv' csv header;
 """
+
+import MyExp4.views
+import views.admin
+import views.home
 import views.functions
 
 app.run()

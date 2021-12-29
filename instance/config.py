@@ -12,3 +12,4 @@ STRIPE_API_KEY = 'SmFjb2IgS2FwbGFuLU1vc3MgaXMgYSBoZXJv'
 
 # 数据库连接，postgresql+psycopg2://用户名:密码@localhost:端口/数据库名
 SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres:liujn@192.168.216.133:5432/postgres"
+

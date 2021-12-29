@@ -29,7 +29,7 @@ MAIN CONTENT
 <div id="login-page">
     <div class="container">
 
-        <form class="form-login" action="../index.html">
+        <form class="form-login" method = "post">
             <h2 class="form-login-heading">sign in now</h2>
             <div class="login-wrap">
                 <label>
@@ -48,21 +48,7 @@ MAIN CONTENT
                         <input type="checkbox" id="inlineCheckbox2" value="option2"> Merchant
                     </label>
                 </div>
-                <!--                <hr>-->
-                <!--                </form>-->
-                <!-- 滚轮式选择 -->
-                <!--                <div class="control-group">-->
-                <!--                    <label class="control-label" for="selectbasic-0">年级</label>-->
-                <!--                    <div class="controls">-->
-                <!--                        <select id="select_grade" name="selectbasic-0" class="input-xlarge">-->
-                <!--                            <option>2015</option>-->
-                <!--                            <option>2016</option>-->
-                <!--                            <option>2017</option>-->
-                <!--                            <option>2018</option>-->
-                <!--                            <option>2019</option>-->
-                <!--                        </select>-->
-                <!--                    </div>-->
-                <!--                </div>-->
+
 
                 <label class="checkbox">
 		                <span class="pull-right">
@@ -70,16 +56,12 @@ MAIN CONTENT
                             <a data-toggle="modal" href="#myModal"> Forgot Password?</a>
 		                </span>
                 </label>
-                <button class="btn btn-theme btn-block" href="../index.html" type="submit"><i class="fa fa-lock"></i> SIGN
-                    IN
-                </button>
+                <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN </button>
                 <hr>
 
                 <div class="registration">
                     Don't have an account yet?<br/>
-                    <a class="" href="Register.html">
-                        Create an account
-                    </a>
+                    <a class="" href="{{ url_for("register") }}">Create an account</a>
                 </div>
             </div>
 

@@ -5,22 +5,23 @@ from MyExp4 import app
 from MyExp4.database import db_session
 
 
-# login处有问题
 @app.route('/admin/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        name = request.form['username']
+        name = request.form['name']
         email = request.form['email']
+        password = request.form["password"]
         db = db_session()
         error = None
 
-        if not name:
-            error = 'Username is required.'
-        elif not email:
+        if not email:
             error = 'Email address is required.'
+        elif not password:
+            error = 'Please enter the password.'
 
         if error is None:
             try:
+                from MyExp4.crud import CustomerInsert
                 db.execute(
                     "INSERT INTO customer_form (name, email) VALUES (?, ?)",
                     (name, email),
@@ -39,24 +40,39 @@ def register():
 @app.route('/admin/login')
 def login():
     if request.method == 'POST':
-        name = request.form['username']
         email = request.form['email']
+        password = request.form["password"]
         db = db_session()
         error = None
+
+        if not email:
+            error = 'Email address is required.'
+        elif not password:
+            error = 'Please enter the password.'
+
         user = db.execute(
-            'SELECT * FROM user WHERE name = ?', (name,)
+            'SELECT * FROM customer_form WHERE email = ?', email
         ).fetchone()
 
-        if user is None:
-            error = 'Incorrect username.'
-        elif not user['email'] == email:
-            error = 'Incorrect email.'
+        if user is None or not user['email'] == email:
+            error = 'Invalid user!'
 
         if error is None:
-            session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            # store information in a new session and return to the index
+            db_session.clear()
+            db_session['customer_number'] = user['customer_number']
+            db_session['name'] = user['name']
+            db_session['email'] = user['email']
+            print('here')
+            return redirect(url_for('home'))
 
         flash(error)
 
     return render_template('admin/login.html')
+
+
+@app.route("/logout")
+def logout():
+    """Clear the current session, including the stored user id."""
+    db_session.clear()
+    return redirect(url_for("admin.login"))

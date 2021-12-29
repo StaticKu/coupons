@@ -73,21 +73,21 @@ def SignDelete(customer,signup):
     session.close()  # 关闭会话
 
 
-def CouponsInsert(customer,deal_number, description, location, deal_price, original_price, available_date, ending_date):
+def CouponsInsert(customer,deal_number, description, location, deal_price, original_price, ending_date):
     session = db_session()
     try:
         # 创建新Sign对象:
         new_coupon = models.CouponsForm(deal_number=deal_number, description=description,
                                         location=location, deal_price=deal_price,
                                         original_price=original_price,
-                                        available_date=available_date,
+                                        available_date=datetime.datetime.now().strftime("%Y-%m-%d"),
                                         ending_date=ending_date)
         new_log = models.LogTable(customer_number=customer, operation="CouponsInsert",
                                   op_time=datetime.datetime.now(), success="yes", deal_number=deal_number,
                                   description=description,
                                   location=location, deal_price=deal_price,
                                   original_price=original_price,
-                                  available_date=available_date,
+                                  available_date=datetime.datetime.now().strftime("%Y-%m-%d"),
                                   ending_date=ending_date)
         session.add(new_log)
         # 添加到session:
@@ -99,7 +99,7 @@ def CouponsInsert(customer,deal_number, description, location, deal_price, origi
                                   description=description,
                                   location=location, deal_price=deal_price,
                                   original_price=original_price,
-                                  available_date=available_date,
+                                  available_date=datetime.datetime.now().strftime("%Y-%m-%d"),
                                   ending_date=ending_date)
         session.add(new_log)
     session.commit()
@@ -254,4 +254,44 @@ def CustomerDelete(customer_number):
                                   op_time=datetime.datetime.now(), success="no")
         session.add(new_log)
         session.commit()
+    session.close()  # 关闭会话
+
+
+def MaximumPrice(customer_number):
+    session = db_session()  # 创建会话
+    new_log = models.LogTable(customer_number=customer_number, operation="FindMaximumPrice",
+                              op_time=datetime.datetime.now(), success="yes")
+    session.add(new_log)
+    session.commit()
+
+    session.close()  # 关闭会话
+
+
+def Morethan100(customer_number):
+    session = db_session()  # 创建会话
+    new_log = models.LogTable(customer_number=customer_number, operation="FindMoreThan100",
+                              op_time=datetime.datetime.now(), success="yes")
+    session.add(new_log)
+    session.commit()
+
+    session.close()  # 关闭会话
+
+
+def MostPopulardeal(customer_number):
+    session = db_session()  # 创建会话
+    new_log = models.LogTable(customer_number=customer_number, operation="FindMostPopularDeal",
+                              op_time=datetime.datetime.now(), success="yes")
+    session.add(new_log)
+    session.commit()
+
+    session.close()  # 关闭会话
+
+
+def bargain(customer_number):
+    session = db_session()  # 创建会话
+    new_log = models.LogTable(customer_number=customer_number, operation="Bargain",
+                              op_time=datetime.datetime.now(), success="yes")
+    session.add(new_log)
+    session.commit()
+
     session.close()  # 关闭会话

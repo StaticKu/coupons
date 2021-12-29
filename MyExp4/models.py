@@ -1,5 +1,6 @@
-from sqlalchemy import Column, String, Integer, Float, DateTime, Date, ForeignKey, func,Sequence
+from sqlalchemy import Column, String, Integer, Float, DateTime, Date, ForeignKey, func, Sequence
 from sqlalchemy.orm import relationship
+
 """
 如果数据库没有表,会帮你建好的
 """
@@ -16,7 +17,7 @@ class CustomerForm(Base):
     __tablename__ = 'customer_form'
 
     # 表的结构:
-    customer_number = Column(String(30),  primary_key=True, unique=True, nullable=False)
+    customer_number = Column(String(30), primary_key=True, unique=True, nullable=False)
     name = Column(String(30), nullable=False)
     email = Column(String(30), nullable=False)
 
@@ -27,7 +28,7 @@ class CouponsForm(Base):
     __tablename__ = 'coupons_form'
 
     # 表的结构:
-    deal_number = Column(Integer,  primary_key=True, unique=True, nullable=False)
+    deal_number = Column(Integer, primary_key=True, unique=True, nullable=False)
     description = Column(String(40), nullable=False)
     location = Column(String(15), nullable=False)
     deal_price = Column(Float, nullable=False)
@@ -70,4 +71,12 @@ class LogTable(Base):
     ending_date = Column(Date)
 
 
+# 定义LogTable对象:
+class Table_Audit(Base):
+    # 表的名字:
+    __tablename__ = 'table_audit'
 
+    # 表的结构:
+    deal_number = Column(Integer, Sequence('table_audit_deal_number'), primary_key=True)
+    enable_number = Column(Integer)
+    having_number = Column(Integer)
