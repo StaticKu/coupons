@@ -49,5 +49,18 @@ class Sign(Base):
     # CouponsForm = relationship("coupon", backref="user_of_coupon")
 
 
+# 定义User对象:
+class LogTable(Base):
+    # 表的名字:
+    __tablename__ = 'log_table'
+
+    # 表的结构:
+    id_number = Column(Integer, primary_key=True, nullable=False)
+    sign_up_number = Column(Integer, nullable=False)
+    customer_number = Column(String(30))
+    deal_number = Column(Integer)
+    operation = Column(String(30))
+    op_time = Column(DateTime)
+
 
 
