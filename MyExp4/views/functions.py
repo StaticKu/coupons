@@ -32,9 +32,12 @@ def MostPopularDeal():
                            results=db_session.execute("SELECT * FROM most_popular_deal()").all())
 
 
-@app.route('/functions/Bargain')
+@app.route('/functions/Bargain', methods=['GET', 'POST'])
 def Bargain():
     bargain("user")
+    if request.method == 'POST':
+        print(request.form)
+
     return render_template('functions/Bargain.html',
                            results=db_session.execute("SELECT * FROM percentage_bargain()").all())
 

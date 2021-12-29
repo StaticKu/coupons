@@ -197,8 +197,8 @@
 
                               <tbody>
                                   {% for r in results %}
-                                  <tr>
-                                      <td>{{ r.deal_number }}</td>
+
+                                      <td >{{ r.deal_number }}</td>
                                       <td>{{ r.description }}</td>
                                       <td>{{ r.location }}</td>
                                       <td>{{ r.deal_price }}</td>
@@ -206,11 +206,13 @@
                                       <td>{{ r.available_date }}</td>
                                       <td>{{ r.bargain }}</td>
                                       <td>
-                                          <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
+                                          <button class="btn btn-success btn-xs" ><i class="fa fa-check"></i></button>
                                       </td>
+                                  </form>
                                   </tr>
                                   {% endfor %}
                               </tbody>
+
 
 
                           </table>
