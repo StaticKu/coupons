@@ -45,8 +45,6 @@ class Sign(Base):
     sign_up_number = Column(Integer, primary_key=True, nullable=False)
     customer_number = Column(String(30), ForeignKey("customer_form.customer_number"))
     deal_number = Column(Integer, ForeignKey("coupons_form.deal_number"))
-    # CustomerForm = relationship("customer", backref="signup")
-    # CouponsForm = relationship("coupon", backref="user_of_coupon")
 
 
 # 定义User对象:
