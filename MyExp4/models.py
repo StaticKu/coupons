@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Float, DateTime, Date, ForeignKey, func
+from sqlalchemy import Column, String, Integer, Float, DateTime, Date, ForeignKey, func,Sequence
 from sqlalchemy.orm import relationship
 """
 如果数据库没有表,会帮你建好的
@@ -16,7 +16,7 @@ class CustomerForm(Base):
     __tablename__ = 'customer_form'
 
     # 表的结构:
-    customer_number = Column(String(30), primary_key=True, unique=True, nullable=False)
+    customer_number = Column(String(30),  primary_key=True, unique=True, nullable=False)
     name = Column(String(30), nullable=False)
     email = Column(String(30), nullable=False)
 
@@ -27,7 +27,7 @@ class CouponsForm(Base):
     __tablename__ = 'coupons_form'
 
     # 表的结构:
-    deal_number = Column(Integer, primary_key=True, unique=True, nullable=False)
+    deal_number = Column(Integer,  primary_key=True, unique=True, nullable=False)
     description = Column(String(40), nullable=False)
     location = Column(String(15), nullable=False)
     deal_price = Column(Float, nullable=False)
@@ -53,12 +53,19 @@ class LogTable(Base):
     __tablename__ = 'log_table'
 
     # 表的结构:
-    id_number = Column(Integer, primary_key=True, nullable=False)
+    id_number = Column(Integer, Sequence('log_table_id_number'), primary_key=True, nullable=False)
     sign_up_number = Column(Integer, nullable=False)
     customer_number = Column(String(30))
     deal_number = Column(Integer)
     operation = Column(String(30))
     op_time = Column(DateTime)
+    success = Column(String(30))
+    description = Column(String(40))
+    location = Column(String(15))
+    deal_price = Column(Float)
+    original_price = Column(Float)
+    available_date = Column(Date)
+    ending_date = Column(Date)
 
 
 

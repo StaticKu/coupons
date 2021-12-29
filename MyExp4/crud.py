@@ -1,4 +1,6 @@
 # CRUD， add, delete, change, search
+import datetime
+
 from MyExp4 import models
 from MyExp4.database import db_session
 
@@ -16,8 +18,12 @@ def SignInsert(customer, signup, deal):
     new_sign = models.Sign(customer_number=customer, sign_up_number=signup, deal_number=deal)
     # 添加到session:
     session.add(new_sign)
+    new_log = models.LogTable(sign_up_number=signup, customer_number=customer, deal_number=deal, operation="insert",
+                              op_time=datetime.datetime.now(), success="yes")
+    session.add(new_log)
     # 提交即保存到数据库:
     session.commit()
+
     # 关闭session:
     session.close()
 
@@ -41,8 +47,17 @@ def SignDelete(signup):
     # 删除操作
     session = db_session()  # 创建会话
     delete_users = session.query(models.Sign).filter(models.Sign.sign_up__number == signup).first()
+
     if delete_users:
+        new_log = models.LogTable(sign_up_number=signup, operation="delete",
+                                  op_time=datetime.datetime.now(), success="yes")
+        session.add(new_log)
         session.delete(delete_users)
+        session.commit()
+    else:
+        new_log = models.LogTable(sign_up_number=signup, operation="delete",
+                                  op_time=datetime.datetime.now(), success="no")
+        session.add(new_log)
         session.commit()
     session.close()  # 关闭会话
 
@@ -55,6 +70,14 @@ def CouponsInsert(deal_number, description, location, deal_price, original_price
                                     original_price=original_price,
                                     available_date=available_date,
                                     ending_date=ending_date)
+    new_log = models.LogTable(operation="Insert",
+                              op_time=datetime.datetime.now(), success="yes", deal_number=deal_number,
+                              description=description,
+                              location=location, deal_price=deal_price,
+                              original_price=original_price,
+                              available_date=available_date,
+                              ending_date=ending_date)
+    session.add(new_log)
     # 添加到session:
     session.add(new_coupon)
     # 提交即保存到数据库:
@@ -69,6 +92,7 @@ def CouponsSearch(deal_number):
     session = db_session()
     # 创建Query查询，filter是where条件，最后调用one()返回唯一行，如果调用all()则返回所有行:
     user = session.query(models.CouponsForm).filter(models.CouponsForm.deal_number == deal_number).one()
+
     if user:
         # deal_number, description, location, deal_price, original_price, available_date, ending_dates
         print('DealNumber:', user.deal_number)
@@ -78,9 +102,15 @@ def CouponsSearch(deal_number):
         print('Original Price:', user.original_price)
         print('Available Date:', user.available_date)
         print('Ending Dates:', user.ending_dates)
-
+        new_log = models.LogTable(deal_number=deal_number, operation="Search",
+                                  op_time=datetime.datetime.now(), success="yes")
+        session.add(new_log)
     else:
         print("未找到指定结果！")
+        new_log = models.LogTable(deal_number=deal_number, operation="Search",
+                                  op_time=datetime.datetime.now(), success="no")
+        session.add(new_log)
+    session.commit()
     session.close()  # 关闭Session
 
 
@@ -94,6 +124,14 @@ def CouponsChange(deal_number, description, location, deal_price, original_price
     users.original_price = original_price  # 更新操作
     users.available_date = available_date  # 更新操作
     users.ending_date = ending_date  # 更新操作
+    if users:
+        new_log = models.LogTable(deal_number=deal_number, operation="Change",
+                                  op_time=datetime.datetime.now(), success="yes")
+        session.add(new_log)
+    else:
+        new_log = models.LogTable(deal_number=deal_number, operation="Change",
+                                  op_time=datetime.datetime.now(), success="no")
+        session.add(new_log)
     session.add(users)  # 添加到会话
     session.commit()  # 提交即保存到数据库
     session.close()  # 关闭会话
@@ -104,6 +142,14 @@ def CouponsDelete(deal_number):
     delete_users = session.query(models.CouponsForm).filter(models.CouponsForm.deal_number == deal_number).first()
     if delete_users:
         session.delete(delete_users)
+        new_log = models.LogTable(deal_number=deal_number, operation="Delete",
+                                  op_time=datetime.datetime.now(), success="yes")
+        session.add(new_log)
+        session.commit()
+    else:
+        new_log = models.LogTable(deal_number=deal_number, operation="Delete",
+                                  op_time=datetime.datetime.now(), success="no")
+        session.add(new_log)
         session.commit()
     session.close()  # 关闭会话
 
@@ -112,6 +158,7 @@ def CustomerInsert(customer_number, name, email):
     session = db_session()
     # 创建新Sign对象:
     new_customer = models.CustomerForm(name=name, customer_number=customer_number, email=email)
+
     # 添加到session:
     session.add(new_customer)
     # 提交即保存到数据库:
