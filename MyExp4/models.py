@@ -47,7 +47,7 @@ class Sign(Base):
     deal_number = Column(Integer, ForeignKey("coupons_form.deal_number"))
 
 
-# 定义User对象:
+# 定义LogTable对象:
 class LogTable(Base):
     # 表的名字:
     __tablename__ = 'log_table'
