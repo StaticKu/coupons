@@ -51,7 +51,7 @@
           <div id="sidebar"  class="nav-collapse ">
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
-              	  <h5 class="centered">Marcel Newman</h5>
+                   <h5 class="centered">Marcel Newman</h5>
 
                   <li class="mt">
                       <a href="">
@@ -63,7 +63,7 @@
                   <li class="sub-menu">
                       <a href="javascript:;" >
                           <i class="fa fa-tasks"></i>
-                          <span>Forms Function</span>
+                          <span>Forms</span>
                       </a>
                       <ul class="sub">
                           <li><a  href="{{ url_for("MoreThan100") }}">MoreThan100</a></li>
@@ -178,22 +178,21 @@
                                   <th><i class="fa fa-Location"></i> Location</th>
                                   <th><i class=" fa fa-DealPrice"></i> Deal Price</th>
                                   <th><i class=" fa fa-OriginalPrice"></i> Original Price</th>
-                                  <th><i class=" fa fa-AvailableDate"></i> Available Date</th>
-                                  <th><i class=" fa fa-EndingDate"></i> Ending Date</th>
+                                  <th><i class=" fa fa-Bargain"></i> Bargain</th>
                                   <th></th>
                               </tr>
                               </thead>
 
                               <tbody>
-                                  {% for c in Coupons %}
+                                  {% for r in results %}
                                   <tr>
-                                      <td>{{ c.deal_number }}</td>
-                                      <td>{{ c.description }}</td>
-                                      <td>{{ c.location }}</td>
-                                      <td>{{ c.deal_price }}</td>
-                                      <td>{{ c.original_price }}</td>
-                                      <td>{{ c.available_date }}</td>
-                                      <td>{{ c.ending_date }}</td>
+                                      <td>{{ r.deal_number }}</td>
+                                      <td>{{ r.description }}</td>
+                                      <td>{{ r.location }}</td>
+                                      <td>{{ r.deal_price }}</td>
+                                      <td>{{ r.original_price }}</td>
+                                      <td>{{ r.available_date }}</td>
+                                      <td>{{ r.bargain }}</td>
                                       <td>
                                           <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
                                       </td>
