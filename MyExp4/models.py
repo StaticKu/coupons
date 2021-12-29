@@ -54,8 +54,10 @@ class LogTable(Base):
 
     # 表的结构:
     id_number = Column(Integer, Sequence('log_table_id_number'), primary_key=True, nullable=False)
-    sign_up_number = Column(Integer, nullable=False)
+    sign_up_number = Column(Integer)
     customer_number = Column(String(30))
+    name = Column(String(30))
+    email = Column(String(30))
     deal_number = Column(Integer)
     operation = Column(String(30))
     op_time = Column(DateTime)
