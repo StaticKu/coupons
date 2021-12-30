@@ -1,4 +1,7 @@
-from flask import render_template, request
+from datetime import datetime
+from functools import wraps
+
+from flask import render_template, request, redirect, flash, url_for
 
 from MyExp4 import app
 from MyExp4.database import db_session, engine
@@ -7,6 +10,81 @@ from MyExp4.models import CouponsForm, CustomerForm, Sign
 from MyExp4.crud import CouponsInsert
 from MyExp4.crud import CustomerInsert
 from MyExp4.crud import SignInsert
+
+from sqlalchemy import text
+
+from MyExp4 import models
+from MyExp4.database import db_session
+
+user_number = 0
+
+
+@app.route('/admin/register', methods=('GET', 'POST'))
+def register():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form["password"]
+        db = db_session()
+        error = None
+
+        if not email:
+            error = 'Email address is required.'
+        elif not password:
+            error = 'Please enter the password.'
+
+        if error is None:
+            try:
+                from MyExp4.crud import CustomerInsert
+                db.execute(
+                    "INSERT INTO customer_form (name, email) VALUES (?, ?)",
+                    (name, email),
+                )
+                db.commit()
+            except db.IntegrityError:
+                error = f"User {name} is already registered."
+            else:
+                return redirect(url_for("admin.login"))
+
+        flash(error)
+
+    return render_template('admin/register.html')
+
+
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    global user_number
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form["password"]
+        db = db_session()
+        error = None
+
+        if not email:
+            error = 'Email address is required.'
+        elif not password:
+            error = 'Please enter the password.'
+        user = db.execute(
+            text('SELECT * FROM customer_form WHERE email =:email'), {'email': email}).fetchone()
+        user_number = user[1]
+
+        if user is None:
+            error = 'Invalid user!'
+
+        if error is None:
+            # return render_template("home.html", user=user)
+            return redirect(url_for('home'))
+
+        flash(error)
+
+    return render_template('admin/login.html')
+
+
+@app.route("/logout")
+def logout():
+    """Clear the current session, including the stored user id."""
+    db_session.clear()
+    return redirect(url_for("login"))
 
 
 @app.route('/functions/MaximumPrice', methods=['GET', 'POST'])
@@ -47,8 +125,8 @@ def AddCoupon():
         deal_price = request.form["deal_price"]
         original_price = request.form["original_price"]
         ending_date = request.form["ending_date"]
-
-        CouponsInsert("admin", deal_number, description, location, deal_price, original_price, ending_date)
+        print(user_number)
+        CouponsInsert(user_number, deal_number, description, location, deal_price, original_price, ending_date)
     return render_template('functions/AddCoupon.html')
 
 
@@ -76,9 +154,22 @@ def AddSignup():
 
 @app.route('/functions/MyCoupons', methods=['GET', 'POST'])
 def MyCoupons():
-    customer_number = 'C2000'
+    customer_number = user_number
     if request.method == 'POST':
-        customer_number = request.form["customer_number"]
+
+        session = db_session()  # 创建会话
+        if request.form["customer_number"]:
+            customer_number = request.form["customer_number"]
+            new_log = models.LogTable(customer_number=customer_number, operation="FindMyCoupons",
+                                      op_time=datetime.datetime.now(), success="yes")
+            session.add(new_log)
+        else:
+            new_log = models.LogTable(customer_number=customer_number, operation="FindMyCoupons",
+                                      op_time=datetime.datetime.now(), success="no")
+            session.add(new_log)
+        session.commit()
+        session.close()  # 关闭会话
+
     return render_template('functions/MyCoupons.html',
                            results=db_session.execute(
                                text('SELECT * FROM personal_signup(:customer_number)'),
