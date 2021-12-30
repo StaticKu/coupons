@@ -37,7 +37,7 @@
 
             <div class="top-menu">
             	<ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="../admin/login.html">Logout</a></li>
+                    <li><a class="logout" href="admin/login.html">Logout</a></li>
             	</ul>
             </div>
         </header>
@@ -52,7 +52,7 @@
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
 
-              	   <h5 class="centered">Marcel Newman</h5>
+                  <h5 class="centered">Marcel Newman</h5>
 
                   <li class="mt">
                       <a href="">
@@ -107,21 +107,18 @@
       <section id="main-content">
           <section class="wrapper">
           	<h3><i class="fa fa-angle-right"></i> Tables </h3>
-
-            <div class="row mt">
+              <!--主要改这里  ALL Tables -->
+              <div class="row mt">
           		<div class="col-lg-12">
           			<div class="content-panel">
                         <form class="form-inline" role="form" method="post">
-                           Maximum Price:
-                          <input type="text" class="form-control" name="maximum_price" placeholder="Maximum Price">
+                          Customer Number:
+                          <input type="text" class="form-control" name="customer_number" placeholder="C2000">
                           <button type="submit" class="btn btn-theme">Search</button>
                       </form>
           			</div><!-- /form-panel -->
           		</div><!-- /col-lg-12 -->
           	  </div><!-- /row -->
-
-
-              <!--主要改这里  ALL Tables -->
 
               <div class="row mt">
                   <div class="col-md-12">
@@ -131,10 +128,11 @@
 	                  	  	  <hr>
                               <thead>
                               <tr>
-                                  <!--<th><i class="fa fa-DealNumber"></i> Deal Number</th>-->
+                                  <th><i class="fa fa-DealNumber"></i> Deal Number</th>
                                   <th><i class="fa fa-Description"></i> Description</th>
                                   <th><i class="fa fa-Location"></i> Location</th>
                                   <th><i class=" fa fa-DealPrice"></i> Deal Price</th>
+                                  <th><i class=" fa fa-OriginalPrice"></i> Original Price</th>
                                   <th><i class=" fa fa-AvailableDate"></i> Available Date</th>
                                   <th><i class=" fa fa-EndingDate"></i> Ending Date</th>
                                   <th></th>
@@ -144,9 +142,11 @@
                               <tbody>
                                   {% for r in results %}
                                   <tr>
+                                      <td>{{ r.deal_number }}</td>
                                       <td>{{ r.description }}</td>
                                       <td>{{ r.location }}</td>
                                       <td>{{ r.deal_price }}</td>
+                                      <td>{{ r.original_price }}</td>
                                       <td>{{ r.available_date }}</td>
                                       <td>{{ r.ending_date }}</td>
                                       <td>

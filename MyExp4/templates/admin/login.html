@@ -29,16 +29,12 @@ MAIN CONTENT
 <div id="login-page">
     <div class="container">
 
-        <form class="form-login" method = "post">
+        <form class="form-login" method="post">
             <h2 class="form-login-heading">sign in now</h2>
             <div class="login-wrap">
-                <label>
-                    <input type="text" class="form-control" placeholder="Email" autofocus>
-                </label>
+                <input type="text" class="form-control" name="email" placeholder="Email" autofocus>
                 <br>
-                <label>
-                    <input type="password" class="form-control" placeholder="Password">
-                </label>
+                <input type="password" class="form-control" name="password" placeholder="Password">
                 <br>
                 <div align="center">
                     <label class="checkbox-inline">
@@ -49,11 +45,9 @@ MAIN CONTENT
                     </label>
                 </div>
 
-
                 <label class="checkbox">
 		                <span class="pull-right">
-		                    <!--<a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>-->
-                            <a data-toggle="modal" href="#myModal"> Forgot Password?</a>
+		                    <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>
 		                </span>
                 </label>
                 <button class="btn btn-theme btn-block" type="submit"><i class="fa fa-lock"></i> SIGN IN </button>
@@ -61,7 +55,9 @@ MAIN CONTENT
 
                 <div class="registration">
                     Don't have an account yet?<br/>
-                    <a class="" href="{{ url_for("register") }}">Create an account</a>
+                    <a class="" href="{{ url_for('register') }}">
+                        Create an account
+                    </a>
                 </div>
             </div>
 
@@ -76,11 +72,8 @@ MAIN CONTENT
                         </div>
                         <div class="modal-body">
                             <p>Enter your e-mail address below to reset your password.</p>
-                            <label>
-                                <input type="text" name="email" placeholder="Email" autocomplete="off"
-                                       class="form-control placeholder-no-fix">
-                            </label>
-
+                            <input type="text" name="email" placeholder="Email" autocomplete="off"
+                                   class="form-control placeholder-no-fix">
                         </div>
                         <div class="modal-footer">
                             <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
@@ -92,6 +85,7 @@ MAIN CONTENT
             <!-- modal -->
 
         </form>
+
 
     </div>
 </div>

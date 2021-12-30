@@ -43,7 +43,7 @@ class Sign(Base):
     __tablename__ = 'sign_up_form'
 
     # 表的结构:
-    sign_up_number = Column(Integer, primary_key=True, nullable=False)
+    sign_up_number = Column(Integer, Sequence('sign_up_form_up_number'), primary_key=True, nullable=False)
     customer_number = Column(String(30), ForeignKey("customer_form.customer_number"))
     deal_number = Column(Integer, ForeignKey("coupons_form.deal_number"))
 

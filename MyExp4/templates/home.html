@@ -32,7 +32,7 @@
                   <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
               </div>
             <!--logo start-->
-            <a href="index.html" class="logo"><b>Name</b></a>
+            <a href="index.html" class="logo"><b>Collective Coupons</b></a>
             <!--logo end-->
 
             <div class="top-menu">
@@ -51,7 +51,6 @@
           <div id="sidebar"  class="nav-collapse ">
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
-              	  <h5 class="centered">Marcel Newman</h5>
 
                   <li class="mt">
                       <a href="">
@@ -72,7 +71,6 @@
                           <li><a  href="{{ url_for("Bargain") }}">Bargain</a></li>
                       </ul>
                   </li>
-
                   <li class="sub-menu">
                       <a class="active" href="javascript:;" >
                           <i class="fa fa-th"></i>
@@ -81,12 +79,16 @@
                       <ul class="sub">
                           <li><a  href="{{ url_for("AddCoupon") }}">Add Coupon</a></li>
                           <li><a  href="{{ url_for("AddCustomer") }}">Add Customer</a></li>
+                          <li><a  href="{{ url_for("AddSignup") }}">Add Signup</a></li>
                      </ul>
 
                   </li>
-
-
-
+                  <li class="mt">
+                      <a href="{{ url_for("MyCoupons") }}">
+                          <i class="fa fa-bar-chart-o"></i>
+                          <span>MyCoupons</span>
+                      </a>
+                  </li>
 
               </ul>
               <!-- sidebar menu end-->

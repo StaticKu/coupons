@@ -81,8 +81,16 @@
                       <ul class="sub">
                           <li><a  href="{{ url_for("AddCoupon") }}">Add Coupon</a></li>
                           <li><a  href="{{ url_for("AddCustomer") }}">Add Customer</a></li>
+                          <li><a  href="{{ url_for("AddSignup") }}">Add Signup</a></li>
                      </ul>
 
+                  </li>
+
+                  <li class="mt">
+                      <a href="{{ url_for("MyCoupons") }}">
+                          <i class="fa fa-bar-chart-o"></i>
+                          <span>MyCoupons</span>
+                      </a>
                   </li>
 
 
@@ -197,8 +205,8 @@
 
                               <tbody>
                                   {% for r in results %}
-
-                                      <td >{{ r.deal_number }}</td>
+                                  <tr>
+                                      <td>{{ r.deal_number }}</td>
                                       <td>{{ r.description }}</td>
                                       <td>{{ r.location }}</td>
                                       <td>{{ r.deal_price }}</td>
@@ -206,13 +214,11 @@
                                       <td>{{ r.available_date }}</td>
                                       <td>{{ r.bargain }}</td>
                                       <td>
-                                          <button class="btn btn-success btn-xs" ><i class="fa fa-check"></i></button>
+                                          <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
                                       </td>
-                                  </form>
                                   </tr>
                                   {% endfor %}
                               </tbody>
-
 
 
                           </table>
