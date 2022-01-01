@@ -1,9 +1,11 @@
 # CRUD， add, delete, change, search
 import datetime
 
+from sqlalchemy import func
+
 from MyExp4 import models
 from MyExp4.database import db_session
-
+from MyExp4.models import Sign, LogTable, Table_Audit
 
 '''
 new_coupon = models.CouponsForm()
@@ -23,7 +25,8 @@ def SignInsert(customer, signup, deal):
         new_log = models.LogTable(sign_up_number=signup, customer_number=customer, deal_number=deal, operation="SignInsert",
                                   op_time=datetime.datetime.now(), success="yes")
         session.add(new_log)
-    except:
+    except Exception as e:
+        print(e)
         new_log = models.LogTable(sign_up_number=signup, customer_number=customer, deal_number=deal, operation="SignInsert",
                                   op_time=datetime.datetime.now(), success="no")
         session.add(new_log)
@@ -295,4 +298,33 @@ def bargain(customer_number):
     session.add(new_log)
     session.commit()
 
+    session.close()  # 关闭会话
+
+
+def Table_Audit_Change(customer_number, deal_num):
+    # 更新操作
+    session = db_session()  # 创建会话
+    deal = session.query(func.count(models.Sign.deal_number)).filter_by(deal_number=deal_num).first()  # 查询条件
+    deal1 = session.query(models.Table_Audit).filter_by(deal_number=deal_num).first()  # 查询条件
+    print(deal[0])
+    if deal[0] != deal1.having_number:
+        deal1.having_number = deal[0]
+
+    if deal1:
+        # print("asshole!")
+        deal1.deal_number = deal_num
+        deal1.enable_number = 120
+        deal1.having_number = deal[0]+1
+        new_log = models.LogTable(customer_number=customer_number, deal_number=deal_num, operation="Table_Audit_Change",
+                                  op_time=datetime.datetime.now(), success="yes")
+        session.add(new_log)
+    else:
+        print("::::::::"+deal_num+" "+(deal[0]+1)+":::::::::::::::::::::::")
+        new_deal = models.Table_Audit(deal_number=deal_num, enable_number=120, having_number=deal[0] + 1)
+        print(":::::::::::::::::::::::::::::::")
+        session.add(new_deal)  # 添加到会话
+        new_log = models.LogTable(customer_number=customer_number,  deal_number=deal_num, operation="Table_Audit_Change",
+                                  op_time=datetime.datetime.now(), success="no")
+        session.add(new_log)
+    session.commit()  # 提交即保存到数据库
     session.close()  # 关闭会话

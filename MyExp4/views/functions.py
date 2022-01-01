@@ -2,12 +2,13 @@ from datetime import datetime
 from functools import wraps
 
 from flask import render_template, request, redirect, flash, url_for
+from itsdangerous import json
 
 from MyExp4 import app
 from MyExp4.database import db_session, engine
 from sqlalchemy import text
 from MyExp4.models import CouponsForm, CustomerForm, Sign
-from MyExp4.crud import CouponsInsert
+from MyExp4.crud import CouponsInsert, Table_Audit_Change
 from MyExp4.crud import CustomerInsert
 from MyExp4.crud import SignInsert
 
@@ -53,53 +54,47 @@ def register():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    try:
+
         session = db_session()  # 创建会话
         global user_number
         if request.method == 'POST':
-            email = request.form['email']
-            password = request.form["password"]
-            db = db_session()
-            error = None
+            try:
+                email = request.form['email']
+                password = request.form["password"]
+                db = db_session()
+                error = None
 
-            if not email:
-                error = 'Email address is required.'
-            elif not password:
-                error = 'Please enter the password.'
-            user = db.execute(
-                text('SELECT * FROM customer_form WHERE email =:email'), {'email': email}).fetchone()
-            user_number = user[1]
-            new_log = models.LogTable(customer_number=user_number, operation="login",
-                                      op_time=datetime.now(), success="yes")
-            session.add(new_log)
-            session.commit()  # 提交即保存到数据库
-            session.close()  # 关闭会话
-            if user is None:
-                error = 'Invalid user!'
+                if not email:
+                    error = 'Email address is required.'
+                elif not password:
+                    error = 'Please enter the password.'
+                user = db.execute(
+                    text('SELECT * FROM customer_form WHERE email =:email'), {'email': email}).fetchone()
+                user_number = user[1]
+                new_log = models.LogTable(customer_number=user_number, operation="login",
+                                          op_time=datetime.now(), success="yes")
+                session.add(new_log)
+                session.commit()  # 提交即保存到数据库
+                session.close()  # 关闭会话
+                if user is None:
+                    error = 'Invalid user!'
 
-            if error is None:
-                # return render_template("home.html", user=user)
-                return redirect(url_for('home'))
-            else:
+                if error is None:
+                    # return render_template("home.html", user=user)
+                    return redirect(url_for('home'))
+                else:
+                    flash(error)
+                    return redirect(url_for('login'))
+            except Exception as e:
+                new_log = models.LogTable(customer_number=user_number, operation="login",
+                                          op_time=datetime.now(), success="no")
+                session.add(new_log)
+                session.commit()  # 提交即保存到数据库
+                session.close()  # 关闭会话
                 flash(error)
                 return redirect(url_for('login'))
-    except AttributeError:
-        new_log = models.LogTable(customer_number=user_number, operation="login",
-                                  op_time=datetime.now(), success="no")
-        session.add(new_log)
-        session.commit()  # 提交即保存到数据库
-        session.close()  # 关闭会话
-        flash(error)
-        return redirect(url_for('login'))
-    except Exception as e:
-        new_log = models.LogTable(customer_number=user_number, operation="login",
-                                  op_time=datetime.now(), success="no")
-        session.add(new_log)
-        session.commit()  # 提交即保存到数据库
-        session.close()  # 关闭会话
-        flash(error)
-        return redirect(url_for('login'))
-    return render_template('home.html')
+            return render_template('home.html')
+        return render_template('admin/login.html')
 
 
 @app.route("/logout")
@@ -232,10 +227,11 @@ def AddSignup():
             sign_up_number = request.form["sign_up_number"]
             customer_number = request.form["customer_number"]
             deal_number = request.form["deal_number"]
-
+            Table_Audit_Change(customer_number, deal_number)
             SignInsert(customer_number, sign_up_number, deal_number)
         return render_template('functions/AddSignup.html')
     except Exception as e:
+        print(e)
         new_log = models.LogTable(customer_number=user_number, operation="AddSignup",
                                   op_time=datetime.now(), success="no")
         session.add(new_log)
@@ -285,3 +281,5 @@ def MyCoupons():
                                {'customer_number': customer_number}).all())
 
     # return render_template('home.html', Coupons=db_session.query(CouponsForm).all())
+
+

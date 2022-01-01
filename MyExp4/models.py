@@ -77,6 +77,6 @@ class Table_Audit(Base):
     __tablename__ = 'table_audit'
 
     # 表的结构:
-    deal_number = Column(Integer, Sequence('table_audit_deal_number'), primary_key=True)
+    deal_number = Column(Integer, primary_key=True, nullable=False)
     enable_number = Column(Integer)
     having_number = Column(Integer)
